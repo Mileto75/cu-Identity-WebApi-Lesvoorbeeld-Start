@@ -1,5 +1,6 @@
 ﻿using cu.ApiBasics.Lesvoorbeeld.Avond.Api.DTOs.Products;
 using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -53,6 +54,7 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.Controllers
             return Ok(productResponseDto);
         }
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Add(ProductAddRequestDto
             productAddRequestDto)
         {

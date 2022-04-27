@@ -1,11 +1,13 @@
 using cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Data;
 using cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Repositories;
+using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Entities;
 using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Interfaces.Repositories;
 using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Interfaces.Services;
 using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,9 +34,27 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            //configure identity
+            services.AddIdentity<ApplicationUser, IdentityRole>(
+                options => 
+                {
+                    options.SignIn.RequireConfirmedEmail = false;//only for development!
+                    //only for development
+                    //set some flexible password rules
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequiredLength = 3;
+                    options.Password.RequireUppercase = false;
+                })
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+            
             services.AddDbContext<ApplicationDbContext>(options => 
             options.UseSqlServer(Configuration.GetConnectionString("ProductDatabase")));
+
+            //add authentication and authorization
+            services.AddAuthentication();
+            services.AddAuthorization();
 
             //repositories
             services.AddScoped<IProductRepository, ProductRepository>();
@@ -43,6 +63,7 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api
             //services
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IUserService, UserService>();
             //setup API
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -64,9 +85,9 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

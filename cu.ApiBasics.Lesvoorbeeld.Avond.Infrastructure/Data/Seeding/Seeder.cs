@@ -1,4 +1,5 @@
 ﻿using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,65 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Data.Seeding
 {
     public static class Seeder
     {
+        
         public static void Seed(ModelBuilder modelBuilder)
         {
+            IPasswordHasher<ApplicationUser> passwordHasher
+                = new PasswordHasher<ApplicationUser>();
+            //admin user
+            var admin = new ApplicationUser
+            {
+                Id = "1",
+                UserName = "admin@products.com",
+                NormalizedUserName = "ADMIN@PRODUCTS.COM",
+                Email = "admin@products.com",
+                NormalizedEmail = "ADMIN@PRODUCTS.COM",
+                Firstname = "Johnny",
+                Lastname = "De Beer",
+                SecurityStamp = Guid.NewGuid().ToString(),
+                ConcurrencyStamp = Guid.NewGuid().ToString(),
+                EmailConfirmed = true,
+            };
+            //hash password
+            admin.PasswordHash = passwordHasher.HashPassword(admin, "test");
+            //add to applicationuser entity
+            modelBuilder.Entity<ApplicationUser>().HasData(admin);
             modelBuilder.Entity<Category>().HasData
                 (new Category[] {
                     new Category { Id = 1,Name = "Laptops" },
                     new Category { Id = 2,Name = "PC's" },
                     new Category { Id = 3,Name = "Phones" }
+                });
+            //add claim to user
+            modelBuilder.Entity<IdentityUserClaim<string>>()
+                .HasData(new IdentityUserClaim<string> { Id = 1, UserId = "1",
+                ClaimType ="role", ClaimValue = "admin"});
+            //another user
+            var user = new ApplicationUser
+            {
+                Id = "2",
+                UserName = "bart@products.com",
+                NormalizedUserName = "BART@PRODUCTS.COM",
+                Email = "bart@products.com",
+                NormalizedEmail = "BART@PRODUCTS.COM",
+                Firstname = "Bart",
+                Lastname = "De Beer",
+                SecurityStamp = Guid.NewGuid().ToString(),
+                ConcurrencyStamp = Guid.NewGuid().ToString(),
+                EmailConfirmed = true,
+            };
+            //hash password
+            user.PasswordHash = passwordHasher.HashPassword(user, "test");//only in development!
+            //add to table
+            modelBuilder.Entity<ApplicationUser>().HasData(user);
+            //add claim
+            modelBuilder.Entity<IdentityUserClaim<string>>()
+                .HasData(new IdentityUserClaim<string>
+                {
+                    Id = 2,
+                    UserId = "2",
+                    ClaimType = "role",
+                    ClaimValue = "customer"
                 });
             modelBuilder.Entity<Property>().HasData(
                 new Property[] { 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Data;
 
 namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220425165843_identity")]
+    partial class identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,22 +94,6 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserClaims");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClaimType = "role",
-                            ClaimValue = "admin",
-                            UserId = "1"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ClaimType = "role",
-                            ClaimValue = "customer",
-                            UserId = "2"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -317,44 +303,6 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "7c447342-050f-4d47-9159-8ce91ebbc0d2",
-                            Email = "admin@products.com",
-                            EmailConfirmed = true,
-                            Firstname = "Johnny",
-                            Lastname = "De Beer",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@PRODUCTS.COM",
-                            NormalizedUserName = "ADMIN@PRODUCTS.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFUhd60WHp2CsYFyEi9mAFEF0WCfy+2zp7GGA7VHY/by8CNXwutgOXihxgl1qjSSqg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "228f4dac-9630-430e-86b7-e1a30285f330",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@products.com"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "d20d899c-73d6-4721-9f19-ea0d98240632",
-                            Email = "bart@products.com",
-                            EmailConfirmed = true,
-                            Firstname = "Bart",
-                            Lastname = "De Beer",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "BART@PRODUCTS.COM",
-                            NormalizedUserName = "BART@PRODUCTS.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBCZ1M73sCQBrelhBkMeODKpH+L0K53WVWNNNJVs2vrKMUS6Ra7re96ttWLykaznow==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "2a721a7d-b0cd-42e6-b81f-f39bf9d140d2",
-                            TwoFactorEnabled = false,
-                            UserName = "bart@products.com"
-                        });
                 });
 
             modelBuilder.Entity("cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Entities.Category", b =>

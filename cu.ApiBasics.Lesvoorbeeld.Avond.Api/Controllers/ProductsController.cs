@@ -38,6 +38,7 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.Controllers
             return Ok(productsResponseDto);
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Get()
         {
             var products = await _productService.GetAllAsync();
@@ -54,7 +55,6 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.Controllers
             return Ok(productResponseDto);
         }
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Add(ProductAddRequestDto
             productAddRequestDto)
         {

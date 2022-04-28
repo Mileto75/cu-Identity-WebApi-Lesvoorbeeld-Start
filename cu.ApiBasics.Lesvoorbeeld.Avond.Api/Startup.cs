@@ -4,6 +4,7 @@ using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Entities;
 using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Interfaces.Repositories;
 using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Interfaces.Services;
 using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,10 +15,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api
@@ -53,7 +56,23 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api
             options.UseSqlServer(Configuration.GetConnectionString("ProductDatabase")));
 
             //add authentication and authorization
-            services.AddAuthentication();
+            services.AddAuthentication(options => 
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateActor = true,
+                    ValidateAudience = true,
+                    ValidIssuer = Configuration["JWTConfiguration:Issuer"],
+                    ValidAudience = Configuration["JWTConfiguration:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                        Configuration["JWTConfiguration:SigninKey"]))
+                };
+            }); 
             services.AddAuthorization();
 
             //repositories
@@ -64,11 +83,36 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IJwtService, JwtService>();
             //setup API
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "cu.ApiBasics.Lesvoorbeeld.Avond.Api", Version = "v1" });
+            services.AddSwaggerGen(c => {
+                {
+                    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme() 
+                    {
+                        Name =  "Authorization",
+                        Type = SecuritySchemeType.ApiKey,
+                        Scheme = "Bearer",
+                        BearerFormat = "JWT",
+                        In = ParameterLocation.Header,
+                        Description ="Enter the token below:"
+                    });
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                         {
+                               new OpenApiSecurityScheme
+                                 {
+                                     Reference = new OpenApiReference
+                                     {
+                                         Type = ReferenceType.SecurityScheme,
+                                         Id = "Bearer"
+                                     }
+                                 },
+                                 new string[] {}
+                         }
+                    });
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "cu.ApiBasics.Lesvoorbeeld.Avond.Api", Version = "v1" });
+                }
             });
         }
 

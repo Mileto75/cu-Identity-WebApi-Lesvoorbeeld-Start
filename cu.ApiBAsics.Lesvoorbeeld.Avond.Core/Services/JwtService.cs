@@ -22,13 +22,15 @@ namespace cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services
 
         public JwtSecurityToken GenerateToken(List<Claim> userClaims)
         {
+            var claims = new List<Claim>();
+            claims.AddRange(userClaims);
             var expirationDays = _configuration.GetValue<int>("JWTConfiguration:TokenExpirationDays");
             var signinKey = _configuration["JWTConfiguration:SigninKey"];
             var token = new JwtSecurityToken
             (
                 issuer: _configuration["JWTConfiguration:Issuer"],
                 audience: _configuration["JWTConfiguration:Audience"],
-                claims: userClaims,
+                claims: claims,
                 expires: DateTime.UtcNow.Add(TimeSpan.FromDays(7)),
                 notBefore: DateTime.UtcNow,
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signinKey))

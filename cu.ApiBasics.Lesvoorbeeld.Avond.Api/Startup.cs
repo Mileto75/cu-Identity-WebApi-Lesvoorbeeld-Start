@@ -20,6 +20,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -73,7 +74,17 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api
                         Configuration["JWTConfiguration:SigninKey"]))
                 };
             }); 
-            services.AddAuthorization();
+            services.AddAuthorization(options => 
+            {
+                options.AddPolicy("admin", policy =>
+                 {
+                     policy.RequireClaim(ClaimTypes.Role, "admin");
+                 });
+                options.AddPolicy("customer", policy =>
+                {
+                    policy.RequireClaim(ClaimTypes.Role, "customer");
+                });
+            });
 
             //repositories
             services.AddScoped<IProductRepository, ProductRepository>();

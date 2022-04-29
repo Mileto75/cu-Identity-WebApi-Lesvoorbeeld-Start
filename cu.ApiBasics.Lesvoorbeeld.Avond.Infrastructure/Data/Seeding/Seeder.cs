@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,7 +44,7 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Data.Seeding
             //add claim to user
             modelBuilder.Entity<IdentityUserClaim<string>>()
                 .HasData(new IdentityUserClaim<string> { Id = 1, UserId = "1",
-                ClaimType ="role", ClaimValue = "admin"});
+                ClaimType = ClaimTypes.Role, ClaimValue = "admin"});
             //another user
             var user = new ApplicationUser
             {
@@ -68,7 +69,7 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Data.Seeding
                 {
                     Id = 2,
                     UserId = "2",
-                    ClaimType = "role",
+                    ClaimType = ClaimTypes.Role,
                     ClaimValue = "customer"
                 });
             modelBuilder.Entity<Property>().HasData(

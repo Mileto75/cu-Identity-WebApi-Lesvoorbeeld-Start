@@ -49,14 +49,44 @@ namespace cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services
             };
         }
 
-        public Task Logout()
+        public async Task Logout()
         {
-            throw new NotImplementedException();
+            await _signInManager.SignOutAsync();
         }
 
-        public Task<AuthenticateResultModel> Register(string firstname, string lastname, string username, string password, string repeatPassword)
+        public async Task<AuthenticateResultModel> Register(string firstname, string lastname, string username, string password)
         {
-            throw new NotImplementedException();
+            //check is username exists
+            var user = await _userManager.FindByNameAsync(username);
+            if(user != null)
+            {
+                return new AuthenticateResultModel 
+                {
+                    Messages = new List<string> { "Registration failed"}
+                };
+            }
+            //create a user
+            var newUser = new ApplicationUser
+            {
+                UserName = username,
+                Email = username,
+                Firstname = firstname,
+                Lastname = lastname,
+            };
+            //put in database 
+            var result = await _userManager.CreateAsync(newUser,password);
+            if (result.Succeeded)
+            {
+                return new AuthenticateResultModel
+                {
+                    Success = true,
+                    Messages = new List<string> { "User registered!" }
+                };
+            }
+            return new AuthenticateResultModel
+            {
+                Messages = new List<string> { "Registration failed" }
+            };
         }
     }
 }

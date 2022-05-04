@@ -52,7 +52,6 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api
                     options.Password.RequireUppercase = false;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            
             services.AddDbContext<ApplicationDbContext>(options => 
             options.UseSqlServer(Configuration.GetConnectionString("ProductDatabase")));
 
@@ -80,9 +79,18 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api
                  {
                      policy.RequireClaim(ClaimTypes.Role, "admin");
                  });
+                //must be admin or customer
                 options.AddPolicy("customer", policy =>
                 {
-                    policy.RequireClaim(ClaimTypes.Role, "customer");
+                    policy.RequireAssertion(context =>
+                    { 
+                        if(context.User.HasClaim(ClaimTypes.Role,"admin") 
+                        || context.User.HasClaim(ClaimTypes.Role,"customer"))
+                        {
+                            return true;
+                        }
+                        return false;
+                    });
                 });
             });
 

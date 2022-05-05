@@ -54,7 +54,13 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddDbContext<ApplicationDbContext>(options => 
             options.UseSqlServer(Configuration.GetConnectionString("ProductDatabase")));
-
+            services.AddCors(options =>
+            options.AddDefaultPolicy(builder => 
+            {
+                builder.AllowAnyOrigin();
+                builder.AllowAnyMethod();
+                builder.AllowAnyHeader();
+            }));
             //add authentication and authorization
             services.AddAuthentication(options => 
             {
@@ -146,7 +152,7 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

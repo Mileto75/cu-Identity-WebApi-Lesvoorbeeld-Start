@@ -18,12 +18,12 @@ namespace cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services
         {
             _categoryRepository = categoryRepository;
         }
-        public Task<ItemResultModel<Product>> GetAllAsync()
+        public Task<ItemResultModel<Category>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<ItemResultModel<Product>> GetByIdAsync(int id)
+        public Task<ItemResultModel<Category>> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }

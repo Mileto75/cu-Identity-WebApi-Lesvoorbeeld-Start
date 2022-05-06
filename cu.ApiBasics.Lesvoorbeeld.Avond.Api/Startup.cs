@@ -153,6 +153,7 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api
 
             app.UseHttpsRedirection();
             app.UseCors();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

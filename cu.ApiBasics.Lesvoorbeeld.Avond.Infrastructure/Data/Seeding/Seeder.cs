@@ -83,12 +83,12 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Data.Seeding
                 );
             modelBuilder.Entity<Product>().HasData(
                 new Product[] { 
-                    new Product { Id = 1,Name="Samsung L7",Price=456.23M,CategoryId=3},
-                    new Product { Id = 2,Name="Redmi Note7",Price=325.13M,CategoryId=3},
-                    new Product { Id = 3,Name="Dell Latitude",Price=1456.23M,CategoryId=1},
-                    new Product { Id = 4,Name="Dell Desktop",Price=856.3M,CategoryId=2},
-                    new Product { Id = 5,Name="IBook 7",Price=2456.00M,CategoryId=1},
-                    new Product { Id = 6,Name="Iphone12",Price=958.23M,CategoryId=3},
+                    new Product { Id = 1,Name="Samsung L7",Price=456.23M,CategoryId=3,Image="phone.jpg"},
+                    new Product { Id = 2,Name="Redmi Note7",Price=325.13M,CategoryId=3,Image="phone.jpg"},
+                    new Product { Id = 3,Name="Dell Latitude",Price=1456.23M,CategoryId=1,Image="laptop.jpg"},
+                    new Product { Id = 4,Name="Dell Desktop",Price=856.3M,CategoryId=2, Image="laptop.jpg"},
+                    new Product { Id = 5,Name="IBook 7",Price=2456.00M,CategoryId=1, Image = "laptop.jpg"},
+                    new Product { Id = 6,Name="Ipad12",Price=958.23M,CategoryId=3,Image="tablet.jpg"},
                 }
                 );
             modelBuilder.Entity($"{nameof(Product)}{nameof(Property)}").HasData

@@ -1,4 +1,5 @@
-﻿using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services.Models;
+﻿using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Entities;
+using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Interfaces.Services
     {
         Task<AuthenticateResultModel> Login(string username, string password);
         Task Logout();
-        Task<AuthenticateResultModel> Register(string firstname, string lastname, string username, string password,
-            string repeatPassword);
+        Task<AuthenticateResultModel> Register(string firstname, string lastname, string username, string password
+            );
+        IQueryable<ApplicationUser> GetUsers();
     }
 }

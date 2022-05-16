@@ -1,8 +1,10 @@
 ﻿using cu.ApiBasics.Lesvoorbeeld.Avond.Api.DTOs.Products;
 using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,9 +15,12 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
-        public ProductsController(IProductService productService)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public ProductsController(IProductService productService, IHttpContextAccessor httpContextAccessor)
         {
             _productService = productService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet("{id}")]
@@ -33,14 +38,18 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.Controllers
                 Category = product.Items.First().Category.Name,
                 Properties = product.Items.First().Properties
                 .Select(pr => pr.Name)
-
             };
             return Ok(productsResponseDto);
         }
         [HttpGet]
+        [Authorize(Policy = "customer")]
         public async Task<IActionResult> Get()
         {
             var products = await _productService.GetAllAsync();
+            if (!products.IsSuccess)
+            {
+                return BadRequest(products.ValidationErrors);
+            }
             var productResponseDto = products.Items.Select(p =>
                 new ProductResponseDto
                 {
@@ -48,13 +57,14 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.Controllers
                     Name = p.Name,
                     Category = p.Category.Name,
                     Price = p.Price,
+                    Image = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}/images/products/{p.Image}",  
                     Properties = p.Properties.Select(p => p.Name)
                 });
                
             return Ok(productResponseDto);
         }
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "admin")]
         public async Task<IActionResult> Add(ProductAddRequestDto
             productAddRequestDto)
         {
@@ -110,6 +120,28 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.Controllers
                 return Ok("Product deleted!");
             }
             return BadRequest("Something went wrong! please try again!");
+        }
+        [HttpGet("category/{id}")]
+        public async Task<IActionResult> GetByCategoryId(int id)
+        {
+            var products = await _productService.GetByCategoryIdAsync(id);
+            if(!products.IsSuccess)
+            {
+                return BadRequest(products.ValidationErrors);
+            }
+            var productResponseDto = products.Items.Select(p =>
+                new ProductResponseDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Category = p.Category.Name,
+                    Price = p.Price,
+                    Image = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}/images/products/{p.Image}",
+                    Properties = p.Properties.Select(p => p.Name)
+                });
+
+            return Ok(productResponseDto);
+
         }
     }
 }

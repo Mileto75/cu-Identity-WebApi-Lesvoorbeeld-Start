@@ -2,6 +2,7 @@
 using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Interfaces.Repositories;
 using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Interfaces.Services;
 using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services.Models;
+using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,6 +16,7 @@ namespace cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services
     {
         private readonly IProductRepository _productRepository;
         private readonly IPropertyRepository _propertyRepository;
+        
 
         public ProductService(IProductRepository productRepository,
             IPropertyRepository propertyRepository)
@@ -75,6 +77,23 @@ namespace cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services
                 new ValidationResult("No products found!")
             };
             return itemResultModel;
+        }
+
+        public async Task<ItemResultModel<Product>> GetByCategoryIdAsync(int id)
+        {
+            var products = await _productRepository.GetByCategoryIdAsync(id);
+            if(products == null)
+            {
+                return new ItemResultModel<Product> 
+                {
+                    ValidationErrors = new List<ValidationResult> { new ValidationResult("No products found!") }
+                };
+            }
+            return new ItemResultModel<Product>
+            {
+                IsSuccess = true,
+                Items = products
+            };
         }
 
         public async Task<ItemResultModel<Product>> GetByIdAsync(int id)

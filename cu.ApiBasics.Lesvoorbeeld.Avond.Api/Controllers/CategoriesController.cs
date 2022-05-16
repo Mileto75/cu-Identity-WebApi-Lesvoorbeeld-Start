@@ -25,9 +25,9 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            return Ok($"get by id: {id}");
+            return Ok(await _categoryService.GetByIdAsync(id));
         }
 
         [HttpPost]

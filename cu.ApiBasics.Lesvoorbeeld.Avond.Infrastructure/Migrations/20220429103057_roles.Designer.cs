@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Data;
 
 namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220429103057_roles")]
+    partial class roles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -323,7 +325,7 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "276a1a8a-cb71-48ba-aec5-18ad2b18272f",
+                            ConcurrencyStamp = "0ed71822-6937-4fe0-a5d8-9b8cdeaffccf",
                             Email = "admin@products.com",
                             EmailConfirmed = true,
                             Firstname = "Johnny",
@@ -331,9 +333,9 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@PRODUCTS.COM",
                             NormalizedUserName = "ADMIN@PRODUCTS.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMDXa9x66DIUAODuPmyCMBep2KF9Pk7SAQQgyOhJkY9VocooqX5hho4z6H4jC2B8BQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIPxTAoLlM62xqoe7ew00hV689Dn9yemJn8q6OrNSWpPqAz6tx/tafteDDbTfdIidQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7e61de9f-2599-4165-9d3f-0cf0e591c048",
+                            SecurityStamp = "56119ccf-245e-48a5-afe3-47b29ab60a69",
                             TwoFactorEnabled = false,
                             UserName = "admin@products.com"
                         },
@@ -341,7 +343,7 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c84d3200-07d0-4084-a77e-4f1ace971b7e",
+                            ConcurrencyStamp = "4edde5f6-cb9f-47a5-aea0-517ea8b51897",
                             Email = "bart@products.com",
                             EmailConfirmed = true,
                             Firstname = "Bart",
@@ -349,9 +351,9 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "BART@PRODUCTS.COM",
                             NormalizedUserName = "BART@PRODUCTS.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA7Q7mkvzWLOnQF20sOrIT+TMtQjKmrlTXpaUzr6wqQpwwssHPhVsrh6/d+G7BwqGA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJbNG+1tSSh47+OQeWEa9iLkuwxD6FUTlJFu2yj+YRQgiOcv7YgZrBdSiS5Qfhljug==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "06cd582d-16b1-4a36-989a-1ff76a41b429",
+                            SecurityStamp = "bd677f2f-68a8-4213-b1fc-72c4165468b3",
                             TwoFactorEnabled = false,
                             UserName = "bart@products.com"
                         });
@@ -419,7 +421,6 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Migrations
                         {
                             Id = 1,
                             CategoryId = 3,
-                            Image = "phone.jpg",
                             Name = "Samsung L7",
                             Price = 456.23m
                         },
@@ -427,7 +428,6 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Migrations
                         {
                             Id = 2,
                             CategoryId = 3,
-                            Image = "phone.jpg",
                             Name = "Redmi Note7",
                             Price = 325.13m
                         },
@@ -435,7 +435,6 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Migrations
                         {
                             Id = 3,
                             CategoryId = 1,
-                            Image = "laptop.jpg",
                             Name = "Dell Latitude",
                             Price = 1456.23m
                         },
@@ -443,7 +442,6 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Migrations
                         {
                             Id = 4,
                             CategoryId = 2,
-                            Image = "laptop.jpg",
                             Name = "Dell Desktop",
                             Price = 856.3m
                         },
@@ -451,7 +449,6 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Migrations
                         {
                             Id = 5,
                             CategoryId = 1,
-                            Image = "laptop.jpg",
                             Name = "IBook 7",
                             Price = 2456.00m
                         },
@@ -459,8 +456,7 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Infrastructure.Migrations
                         {
                             Id = 6,
                             CategoryId = 3,
-                            Image = "tablet.jpg",
-                            Name = "Ipad12",
+                            Name = "Iphone12",
                             Price = 958.23m
                         });
                 });

@@ -10,7 +10,7 @@ namespace cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Interfaces.Services
 {
     public interface ICategoryService
     {
-        Task<ItemResultModel<Product>> GetAllAsync();
-        Task<ItemResultModel<Product>> GetByIdAsync(int id);
+        Task<ItemResultModel<Category>> GetAllAsync();
+        Task<ItemResultModel<Category>> GetByIdAsync(int id);
     }
 }

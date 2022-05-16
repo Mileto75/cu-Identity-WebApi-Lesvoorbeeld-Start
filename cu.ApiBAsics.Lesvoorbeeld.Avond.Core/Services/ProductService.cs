@@ -3,6 +3,7 @@ using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Interfaces.Repositories;
 using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Interfaces.Services;
 using cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,21 +17,24 @@ namespace cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services
     {
         private readonly IProductRepository _productRepository;
         private readonly IPropertyRepository _propertyRepository;
-        
+        private readonly IImageService _imageService;
+
 
         public ProductService(IProductRepository productRepository,
-            IPropertyRepository propertyRepository)
+            IPropertyRepository propertyRepository,
+            IImageService imageService)
         {
             _productRepository = productRepository;
             _propertyRepository = propertyRepository;
+            _imageService = imageService;
         }
 
-        public async Task<ItemResultModel<Product>> Add(string name, int categoryId, decimal price, IEnumerable<int> properties)
+        public async Task<ItemResultModel<Product>> Add(string name, int categoryId, decimal price, IEnumerable<int> properties, IFormFile image)
         {
             //perform checks(price for example)
             //get the properties
             var allProperties = await _propertyRepository.GetAllAsync();
-                
+
             //new product
             var newProduct = new Product
             {
@@ -38,7 +42,8 @@ namespace cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services
                 Price = price,
                 CategoryId = categoryId,
                 Properties = allProperties.Where(pr => properties.Contains(pr.Id))
-                .ToList()
+                .ToList(),
+                Image = await _imageService.AddOrUpdateImageAsync<Product>(image),
             };
             //save to the database
             if(!await _productRepository.AddAsync(newProduct))
@@ -113,7 +118,7 @@ namespace cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services
             return itemResultModel;
         }
 
-        public async Task<ItemResultModel<Product>> UpdateAsync(int id, string name, int categoryId, decimal price, IEnumerable<int> properties)
+        public async Task<ItemResultModel<Product>> UpdateAsync(int id, string name, int categoryId, decimal price, IEnumerable<int> properties, IFormFile image)
         {
             //check for null
             //get the product
@@ -137,6 +142,7 @@ namespace cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services
             product.Properties =
             _propertyRepository.GetAll().Where(pr => properties.Contains(pr.Id))
             .ToList();
+            product.Image = await _imageService.AddOrUpdateImageAsync<Product>(image, product.Image);
             //save to the db
             if(!await _productRepository.UpdateAsync(product))
             {

@@ -37,7 +37,9 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.Controllers
                 Name = product.Items.First().Name,
                 Category = product.Items.First().Category.Name,
                 Properties = product.Items.First().Properties
-                .Select(pr => pr.Name)
+                .Select(pr => pr.Name),
+                Image = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}/images/product/{product.Items.First().Image}",
+
             };
             return Ok(productsResponseDto);
         }
@@ -57,7 +59,7 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.Controllers
                     Name = p.Name,
                     Category = p.Category.Name,
                     Price = p.Price,
-                    Image = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}/images/products/{p.Image}",  
+                    Image = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}/images/product/{p.Image}",  
                     Properties = p.Properties.Select(p => p.Name)
                 });
                
@@ -65,7 +67,7 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.Controllers
         }
         [HttpPost]
         [Authorize(Policy = "admin")]
-        public async Task<IActionResult> Add(ProductAddRequestDto
+        public async Task<IActionResult> Add([FromForm]ProductAddRequestDto
             productAddRequestDto)
         {
             //check for model errors
@@ -78,7 +80,8 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.Controllers
                 productAddRequestDto.Name,
                 productAddRequestDto.CategoryId,
                 productAddRequestDto.Price,
-                productAddRequestDto.Properties
+                productAddRequestDto.Properties,
+                productAddRequestDto.Image
                 );
             if(!result.IsSuccess)
             {
@@ -89,7 +92,7 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.Controllers
         }
         //put to update
         [HttpPut]
-        public async Task<IActionResult> Update(ProductUpdateRequestDto
+        public async Task<IActionResult> Update([FromForm]ProductUpdateRequestDto
             productUpdateRequestDto)
         {
             //check for validation errors
@@ -102,7 +105,8 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.Controllers
                 productUpdateRequestDto.Product.Name,
                 productUpdateRequestDto.Product.CategoryId,
                 productUpdateRequestDto.Product.Price,
-                productUpdateRequestDto.Product.Properties
+                productUpdateRequestDto.Product.Properties,
+                productUpdateRequestDto.Product.Image
                 );
             //check for database errors
             if(!result.IsSuccess)

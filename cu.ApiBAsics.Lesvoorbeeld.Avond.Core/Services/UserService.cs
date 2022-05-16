@@ -38,8 +38,8 @@ namespace cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services
         public async Task<AuthenticateResultModel> Login(string username, string password)
         {
             //check if user exists
-            var result = await _signInManager.PasswordSignInAsync(username,password,false,false);
-            if (!result.Succeeded)
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
             {
                 return new AuthenticateResultModel {
                 Messages = new List<string> { "Login failed!"}
@@ -47,7 +47,6 @@ namespace cu.ApiBAsics.Lesvoorbeeld.Avond.Core.Services
             }
             //user exists => generate token
             //get the claims
-            var user = await _userManager.FindByNameAsync(username);
             var claims = (List<Claim>)await _userManager.GetClaimsAsync(user);
             //generate the token
             var token = _jwtService.GenerateToken(claims);

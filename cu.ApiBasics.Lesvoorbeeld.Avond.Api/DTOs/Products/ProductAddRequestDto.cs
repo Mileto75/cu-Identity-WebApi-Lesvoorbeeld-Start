@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.DTOs.Products
@@ -12,5 +13,6 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api.DTOs.Products
         [Required(ErrorMessage = "Please provide a value for {0}")]
         public decimal Price { get; set; }
         public IEnumerable<int> Properties { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

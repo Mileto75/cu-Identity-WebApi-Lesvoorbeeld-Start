@@ -109,6 +109,7 @@ namespace cu.ApiBasics.Lesvoorbeeld.Avond.Api
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IImageService, ImageService>();
             //setup API
             services.AddControllers();
             services.AddSwaggerGen(c => {
